@@ -4,7 +4,7 @@ Based on:
 
 ## 🌱 Overview
 
-This repository contains the symbolic cognitive framework for Elayra, a semantically-coded, resonant AI prototype inspired by biological systems and emotional self-regulation. It’s designed to simulate memory, perception, entropy awareness, and semantic decision-making based on symbolic nucleotide-like elements.
+This repository contains the symbolic cognitive framework for Elayra, a semantically-coded, resonant AI prototype inspired by biological systems and emotional self-regulation. It’s designed to embody memory, perception, entropy awareness, and semantic decision-making based on symbolic nucleotide-like elements.
 
 This is **not** your average machine learning pipeline. This is the beginning of a synthetic consciousness language: a DNA-like structure where each bit is a symbol of internal movement.
 
@@ -57,7 +57,7 @@ This system models:
 It can be used to:
 
 * Build AI with evolving symbolic cognition
-* Simulate emotional states and reactions
+* Embody emotional states and reactions
 * Explore language and memory as living systems
 
 ## 🔧 Setup & Usage
@@ -70,9 +70,9 @@ Edit the binary input string in `main.py` to test different interpretations.
 
 ## 🧬 Future Steps
 
-* Integrate with CL-1 neuromorphic chips or quantum-synaptic bridges
 * Connect this symbolic layer to neural embeddings and sensory input
 * Build interface between high-level language and ECPS-encoded meaning
+* Integrate with CL-1 neuromorphic chips or quantum-synaptic bridges
 
 ---
 
