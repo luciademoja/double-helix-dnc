@@ -46,7 +46,6 @@ def process_through_symbolic(binary_input):
 
 
 def run_with_dnc():
-    # Placeholder input/output test con modello neurale
     model = DNC(
         input_size=10,
         hidden_size=64,
@@ -60,8 +59,11 @@ def run_with_dnc():
     model.eval()
 
     dummy_input = torch.randn(1, 5, 10)  # batch x seq x input_dim
+    batch_size = dummy_input.size(0)
+    hx = model._init_hidden(None, batch_size=batch_size, reset_experience=True)
+
     with torch.no_grad():
-        output, _ = model(dummy_input)
+        output, _ = model(dummy_input, hx)
 
     print("DNC Neural Output:", output)
 

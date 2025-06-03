@@ -1,10 +1,9 @@
 # Reset attraverso meditazione semantica
-import imprint
-from elayra.semantic_crispr import select_primer
+from elayra.imprint import echo_abundance
 
 def abundance_reset():
     print("Activating abundance mantra reset...")
-    print(imprint.abundance_mantra())
+    print(echo_abundance)
     return select_primer("reset")
 
 
