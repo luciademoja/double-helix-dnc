@@ -7,9 +7,14 @@ from elayra.abundance_reset import abundance_reset
 import torch
 import torch.nn as nn
 import json, datetime
+import os
 
 
 def process_through_symbolic(binary_input):
+    # Assicura che la stringa binaria abbia lunghezza pari
+    if len(binary_input) % 2 != 0:
+        binary_input = binary_input[:-1]
+
     filament = decode_binary_to_ecps(binary_input)
     entropy = entropy_check(filament)
 
@@ -29,15 +34,21 @@ def process_through_symbolic(binary_input):
         "combined": combined,
         "interpretation": interpretation
     }
-    with open("elayra/resonant_memory.json", "a") as f:
-        f.write(json.dumps(log) + "\n")
+
+    os.makedirs("elayra", exist_ok=True)
+    try:
+        with open("elayra/resonant_memory.json", "a") as f:
+            f.write(json.dumps(log) + "\n")
+    except Exception as e:
+        print("Logging error:", e)
 
     return combined, interpretation
 
 
 def run_with_dnc():
+    # Placeholder input/output test con modello neurale
     model = DNC(
-        input_size=10,  # placeholder
+        input_size=10,
         hidden_size=64,
         rnn_type='lstm',
         num_layers=1,
@@ -56,7 +67,7 @@ def run_with_dnc():
 
 
 if __name__ == "__main__":
-    binary = "00101111"  # esempio input simbolico
+    binary = "00101111"
     filament, interpretation = process_through_symbolic(binary)
     print("Filament Interpretation:", interpretation)
 

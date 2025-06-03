@@ -45,3 +45,5 @@ typing_extensions==4.12.2
 urllib3==2.3.0
 visdom==0.2.4
 websocket-client==1.8.0
+torch>=1.10.0
+jsonlib>=1.6.1
