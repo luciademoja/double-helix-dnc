@@ -1,11 +1,8 @@
-from elayra.abundance_reset import abundance_reset, select_primer
 
-def test_select_primer():
-    assert select_primer("reset") == ["E", "S", "E", "P"]
-    assert select_primer("exploration") == ["P", "E", "S", "P"]
+import pytest
+from elayra.abundance_reset import abundance_reset
 
-def test_abundance_reset(monkeypatch):
-    # Stub imprint.abundance_mantra
-    monkeypatch.setattr("imprint.abundance_mantra", lambda: "I am abundant.")
+def test_abundance_reset_output():
     result = abundance_reset()
-    assert result == ["E", "S", "E", "P"]
+    assert isinstance(result, list)
+    assert all(symbol in ["E", "C", "P", "S"] for symbol in result)

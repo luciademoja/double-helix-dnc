@@ -1,17 +1,19 @@
-# Reset attraverso meditazione semantica
+# Rigenerazione del primer in caso di entropia eccessiva
+
 from elayra.imprint import echo_abundance
 
 def abundance_reset():
-    print("Activating abundance mantra reset...")
-    print(echo_abundance)
-    return select_primer("reset")
+    """
+    Genera un primer simbolico che ripristina ordine e coerenza.
+    Include il mantra dell'abbondanza come richiamo interno.
+    """
+    # Primer fisso che rappresenta apertura e riconnessione simbolica
+    primer = ["E", "S", "E", "P"]  # Espansione, Senso, Espansione, Percezione
 
+    # Mantra per uso interno (non incluso nel primer stesso)
+    mantra = echo_abundance()
 
-def select_primer(mode="reset"):
-    primer_library = {
-        "reset": ["E", "S", "E", "P"],
-        "exploration": ["P", "E", "S", "P"],
-        "protection": ["C", "S", "C", "P"],
-        "intuition": ["E", "S", "P", "E"]
-    }
-    return primer_library.get(mode, ["E", "S", "E", "P"])
+    print(f"[ABUNDANCE RESET] Primer generato: {primer}")
+    print(f"[ABUNDANCE RESET] Mantra attivato: {mantra}")
+
+    return primer

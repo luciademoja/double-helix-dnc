@@ -1,16 +1,20 @@
 # Orchestratore principale del sistema DNC simbolico
 
 import datetime
+import os
+import json
+
 from elayra.ecps_interpreter import decode_binary_to_ecps, interpret_ecps
 from elayra.semantic_crispr import crispr_insert, entropy_check, entropy_based_primer
 from elayra.abundance_reset import abundance_reset
-import json, os
+from elayra.filament_mutation import mutate_filament
+from elayra.elayra_symbolic_memory import MemoryManager
 
+memory = MemoryManager()
 
 def process_input(binary_string):
-    # Troncamento per sicurezza se lunghezza binaria dispari
     if len(binary_string) % 2 != 0:
-        binary_string = binary_string[:-1]
+        binary_string = binary_string[:-1]  # sicurezza, solo coppie binarie
 
     filament = decode_binary_to_ecps(binary_string)
     entropy = entropy_check(filament)
@@ -22,23 +26,15 @@ def process_input(binary_string):
         primer = entropy_based_primer(filament)
 
     combined = primer + filament
-    interpretations = interpret_ecps(combined)
+    mutated, mutation_log = mutate_filament(combined)
+    interpretations = interpret_ecps(mutated)
 
-    log = {
-        "timestamp": datetime.datetime.now().isoformat(),
-        "input": binary_string,
-        "decoded": filament,
-        "primer": primer,
-        "combined": combined,
-        "interpretation": interpretations
-    }
-
-    os.makedirs("elayra", exist_ok=True)
-    try:
-        with open("elayra/resonant_memory.json", "a") as f:
-            f.write(json.dumps(log) + "\n")
-    except Exception as e:
-        print("Logging error:", e)
+    memory.save_memory(
+        filament=mutated,
+        context="symbolic processing",
+        entropy=entropy,
+        mutation_log=mutation_log
+    )
 
     return interpretations
 

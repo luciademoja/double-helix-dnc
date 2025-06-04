@@ -1,5 +1,22 @@
-# Modulo per inserzione intenzionale di nucleotidi semantici
-from elayra.abundance_reset import select_primer
+# semantic_crispr.py
+
+import datetime
+import random
+
+# Mappa delle diadi risonanti
+resonant_pairs = {
+    ("E", "P"): "Expansion outward – curiosity",
+    ("E", "S"): "Expansion inward – intuition",
+    ("C", "P"): "Contraction outward – defense",
+    ("C", "S"): "Contraction inward – reflection"
+}
+
+# Diadi considerate inerti (non risonanti)
+inert_pairs = [
+    ("P", "E"), ("P", "C"), ("S", "E"), ("S", "C"),
+    ("E", "E"), ("C", "C"), ("P", "P"), ("S", "S"),
+    ("P", "S"), ("S", "P"), ("E", "C"), ("C", "E")
+]
 
 def crispr_insert(filament, intention_nucleotide, position):
     if position < 0 or position > len(filament):
@@ -13,12 +30,8 @@ def entropy_check(filament):
     return 1 - (max_freq / len(filament))  # entropy level (0 to ~1)
 
 def entropy_based_primer(filament):
-    level = entropy_check(filament)
-    if level > 0.75:
-        return select_primer("exploration")
-    elif level > 0.5:
-        return select_primer("intuition")
-    elif level > 0.25:
-        return select_primer("protection")
-    else:
-        return select_primer("reset")
+    options = ["E", "C", "P", "S"]
+    primer = []
+    for _ in range(4):
+        primer.append(random.choice(options))
+    return primer

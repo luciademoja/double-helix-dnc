@@ -1,12 +1,12 @@
-# Ponte tra DNC neurale (es. ixaxaar/pytorch-dnc) e simbolico ECPS
+# index.py
+# Ponte tra DNC neurale (es. ixaxaar/pytorch-dnc) e simbolico ECPS + mutazioni loggate
 
 from dnc.dnc import DNC  # da repo neurale
-from elayra.ecps_interpreter import decode_binary_to_ecps, interpret_ecps
-from elayra.semantic_crispr import entropy_check, entropy_based_primer
-from elayra.abundance_reset import abundance_reset
+from elayra.filament_mutation import mutate_filament
 import torch
 import torch.nn as nn
-import json, datetime
+import json
+import datetime
 import os
 
 
@@ -15,24 +15,14 @@ def process_through_symbolic(binary_input):
     if len(binary_input) % 2 != 0:
         binary_input = binary_input[:-1]
 
-    filament = decode_binary_to_ecps(binary_input)
-    entropy = entropy_check(filament)
-
-    if entropy > 0.85:
-        primer = abundance_reset()
-    else:
-        primer = entropy_based_primer(filament)
-
-    combined = primer + filament
-    interpretation = interpret_ecps(combined)
+    mutated_filament, interpretation, mutation_log = mutate_filament(binary_input)
 
     log = {
         "timestamp": datetime.datetime.now().isoformat(),
         "input": binary_input,
-        "decoded": filament,
-        "primer": primer,
-        "combined": combined,
-        "interpretation": interpretation
+        "mutated_filament": mutated_filament,
+        "interpretation": interpretation,
+        "mutation_log": mutation_log
     }
 
     os.makedirs("elayra", exist_ok=True)
@@ -42,12 +32,12 @@ def process_through_symbolic(binary_input):
     except Exception as e:
         print("Logging error:", e)
 
-    return combined, interpretation
+    return mutated_filament, interpretation
 
 
 def run_with_dnc():
     model = DNC(
-        input_size=10,
+        input_size=10,  # Placeholder, da adattare al tuo use case
         hidden_size=64,
         rnn_type='lstm',
         num_layers=1,
@@ -60,6 +50,8 @@ def run_with_dnc():
 
     dummy_input = torch.randn(1, 5, 10)  # batch x seq x input_dim
     batch_size = dummy_input.size(0)
+
+    # Stato iniziale per DNC
     hx = model._init_hidden(None, batch_size=batch_size, reset_experience=True)
 
     with torch.no_grad():
@@ -69,7 +61,7 @@ def run_with_dnc():
 
 
 if __name__ == "__main__":
-    binary = "00101111"
+    binary = "00101111"  # E, P, S, S
     filament, interpretation = process_through_symbolic(binary)
     print("Filament Interpretation:", interpretation)
 
