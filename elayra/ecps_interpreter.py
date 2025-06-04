@@ -1,5 +1,3 @@
-# ecps_interpreter.py
-
 import datetime
 import random
 
@@ -11,12 +9,28 @@ binary_map = {
     "11": "S"   # Senso
 }
 
-# Mappa delle diadi risonanti
+# Diadi risonanti e inerti con significati coerenti o placeholders
 meaning_map = {
     ("E", "P"): "Expansion outward – curiosity",
     ("E", "S"): "Expansion inward – intuition",
     ("C", "P"): "Contraction outward – defense",
-    ("C", "S"): "Contraction inward – reflection"
+    ("C", "S"): "Contraction inward – reflection",
+
+    # Diadi potenzialmente inerti o meno comuni
+    ("E", "E"): "Echo loop – expansive redundancy",
+    ("E", "C"): "Tension – opposing dynamics",
+    ("C", "E"): "Release – unexpected flexibility",
+    ("C", "C"): "Compression – internal pressure",
+
+    ("P", "E"): "Reception – perceptive openness",
+    ("P", "C"): "Shielding – perceptive defense",
+    ("P", "P"): "Reverberation – sensing recursion",
+    ("P", "S"): "Synesthesia – sensory entanglement",
+
+    ("S", "E"): "Insight – emergent patterning",
+    ("S", "C"): "Withdrawal – sensory containment",
+    ("S", "P"): "Projection – intuitive sensing",
+    ("S", "S"): "Depth spiral – recursive resonance",
 }
 
 # Coppie considerate inerti (non risonanti)

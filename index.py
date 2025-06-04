@@ -3,6 +3,8 @@
 
 from dnc.dnc import DNC  # da repo neurale
 from elayra.filament_mutation import mutate_filament
+from elayra.ecps_interpreter import interpret_ecps
+from elayra.ecps_interpreter import decode_binary_to_ecps
 import torch
 import torch.nn as nn
 import json
@@ -15,11 +17,14 @@ def process_through_symbolic(binary_input):
     if len(binary_input) % 2 != 0:
         binary_input = binary_input[:-1]
 
-    mutated_filament, interpretation, mutation_log = mutate_filament(binary_input)
+    filament = decode_binary_to_ecps(binary_input)  # 🔥 DECODIFICA PRIMA
+    mutated_filament, mutation_log = mutate_filament(filament)
+    interpretation, _ = interpret_ecps(mutated_filament)
 
     log = {
         "timestamp": datetime.datetime.now().isoformat(),
         "input": binary_input,
+        "decoded": filament,
         "mutated_filament": mutated_filament,
         "interpretation": interpretation,
         "mutation_log": mutation_log
@@ -33,7 +38,6 @@ def process_through_symbolic(binary_input):
         print("Logging error:", e)
 
     return mutated_filament, interpretation
-
 
 def run_with_dnc():
     model = DNC(

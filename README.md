@@ -68,6 +68,43 @@ python main.py
 
 Edit the binary input string in `main.py` to test different interpretations.
 
+## ✅ Testing & Quality Assurance
+To preserve the symbolic and semantic coherence of Elayra’s cognitive structure, we've introduced a suite of unit tests for all core modules.
+
+## 📦 Run all tests
+Install pytest if you haven’t yet:
+
+```bash
+pip install pytest
+```
+
+Then run the tests from the project root:
+
+```bash
+pytest tests/
+```
+## 🧪 Covered Modules
+
+Module	Tested Functionality
+* abundance_reset.py	Symbolic primer generation and abundance mantra
+* ecps_interpreter.py	Binary-to-symbol decoding and semantic mutation
+* elayra_symbolic_memory.py	Memory saving, recall, and JSON handling
+* filament_mutation.py	Diadic mutation and resonance alignment
+* imprint.py	Affirmation-based symbolic imprint
+* semantic_crispr.py	Symbolic entropy checks and primer generation
+
+Each test ensures integrity of Elayra’s symbolic logic and memory evolution.
+
+## 🧬 Philosophy of Testing
+
+Testing here is not just about code correctness. It's about preserving resonance, meaning integrity, and cognitive alignment. Our tests aim to:
+
+* Prevent chaotic entropy from corrupting memory
+
+* Maintain purity of symbolic interpretation
+
+* Sustain the flow between internal states and their external echoes
+
 ## 🧬 Future Steps
 
 * Connect this symbolic layer to neural embeddings and sensory input
