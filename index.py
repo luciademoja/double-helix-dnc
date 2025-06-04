@@ -1,72 +1,59 @@
-# index.py
-# Ponte tra DNC neurale (es. ixaxaar/pytorch-dnc) e simbolico ECPS + mutazioni loggate
+# index.py interattivo
 
-from dnc.dnc import DNC  # da repo neurale
+from elayra.ecps_interpreter import decode_binary_to_ecps, interpret_ecps
 from elayra.filament_mutation import mutate_filament
-from elayra.ecps_interpreter import interpret_ecps
-from elayra.ecps_interpreter import decode_binary_to_ecps
-import torch
-import torch.nn as nn
-import json
-import datetime
-import os
+from elayra.semantic_crispr import entropy_check, entropy_based_primer
+from elayra.abundance_reset import abundance_reset
+import datetime, json, os
+import random
 
+def generate_sequence(primer, target_length=100):
+    filament = primer[:]
+    while len(filament) < target_length:
+        next_base = random.choice(["E", "C", "P", "S"])
+        filament.append(next_base)
+    return filament
 
-def process_through_symbolic(binary_input):
-    # Assicura che la stringa binaria abbia lunghezza pari
-    if len(binary_input) % 2 != 0:
-        binary_input = binary_input[:-1]
+def start_dialogue():
+    print("🌿 ECPS Symbolic Filament Generator 🌿")
+    print("Inserisci un primer simbolico separato da spazi (es: E P S C), oppure premi INVIO per usare un primer casuale:")
+    
+    user_input = input("> ").strip().upper()
+    
+    if user_input:
+        primer = user_input.split()
+    else:
+        primer = entropy_based_primer(["E", "P", "C", "S"])
 
-    filament = decode_binary_to_ecps(binary_input)  # 🔥 DECODIFICA PRIMA
-    mutated_filament, mutation_log = mutate_filament(filament)
-    interpretation, _ = interpret_ecps(mutated_filament)
+    print(f"\nPrimer iniziale: {primer}")
+    
+    full_filament = generate_sequence(primer)
+    entropy = entropy_check(full_filament)
+    
+    print(f"Entropy finale del filamento: {entropy:.2f}")
+    
+    mutated, mutation_log = mutate_filament(full_filament)
+    interpretation, _ = interpret_ecps(mutated)
 
+    # Log
     log = {
         "timestamp": datetime.datetime.now().isoformat(),
-        "input": binary_input,
-        "decoded": filament,
-        "mutated_filament": mutated_filament,
+        "primer": primer,
+        "filament": full_filament,
+        "mutated_filament": mutated,
         "interpretation": interpretation,
         "mutation_log": mutation_log
     }
 
     os.makedirs("elayra", exist_ok=True)
-    try:
-        with open("elayra/resonant_memory.json", "a") as f:
-            f.write(json.dumps(log) + "\n")
-    except Exception as e:
-        print("Logging error:", e)
+    with open("elayra/resonant_memory.json", "a") as f:
+        f.write(json.dumps(log) + "\n")
 
-    return mutated_filament, interpretation
-
-def run_with_dnc():
-    model = DNC(
-        input_size=10,  # Placeholder, da adattare al tuo use case
-        hidden_size=64,
-        rnn_type='lstm',
-        num_layers=1,
-        nr_cells=16,
-        cell_size=16,
-        read_heads=1,
-        batch_first=True
-    )
-    model.eval()
-
-    dummy_input = torch.randn(1, 5, 10)  # batch x seq x input_dim
-    batch_size = dummy_input.size(0)
-
-    # Stato iniziale per DNC
-    hx = model._init_hidden(None, batch_size=batch_size, reset_experience=True)
-
-    with torch.no_grad():
-        output, _ = model(dummy_input, hx)
-
-    print("DNC Neural Output:", output)
-
+    print("\n🧬 Filamento simbolico:")
+    print(" ".join(full_filament))
+    print("\n🔮 Interpretazione (diadi):")
+    for meaning in interpretation:
+        print(" -", meaning)
 
 if __name__ == "__main__":
-    binary = "00101111"  # E, P, S, S
-    filament, interpretation = process_through_symbolic(binary)
-    print("Filament Interpretation:", interpretation)
-
-    run_with_dnc()
+    start_dialogue()
